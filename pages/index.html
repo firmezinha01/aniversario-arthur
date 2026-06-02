@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmação de Presença - ARTHUR HENRIQUE</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <!-- Fundo -->
+  <div class="background">
+    <img src="public/sonic-the-hedgehog-pictures-3ejszlr8zbd5autt.jpg" alt="Convite Sonic">
+  </div>
+
+  <!-- Formulário -->
+  <div class="form-container">
+    <h1>Confirmação de Presença</h1>
+    <p>ANIVERSÁRIO DO ARTHUR HENRIQUE - 5 ANOS</p>
+    <h2>25/06 às 19HS</h2>
+
+    <form id="presencaForm">
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" name="nome" required>
+
+      <label for="telefone">Telefone</label>
+      <input type="tel" id="telefone" name="telefone" required>
+
+      <div class="checkbox">
+        <input type="checkbox" id="presenca" name="presenca">
+        <label for="presenca">Confirmo minha presença</label>
+      </div>
+
+      <button type="submit">Enviar Confirmação</button>
+      <p>RUA BARBACENA, 487 - BAIRRO BOM CLIMA GUARULHOS/SP</p>
+    </form>
+
+    <p id="mensagem"></p>
+
+    <!-- Sonic correndo em volta -->
+    <img src="public/647a3ba4fa037443af7752f0e3f0cb97.gif" alt="Sonic correndo" class="sonic-runner">
+  </div>
+
+  <script>
+    document.getElementById("presencaForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const data = {
+        nome: document.getElementById("nome").value,
+        telefone: document.getElementById("telefone").value,
+        presenca: document.getElementById("presenca").checked
+      };
+
+      const response = await fetch("/api/confirmacao", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+      document.getElementById("mensagem").innerText = result.message;
+      document.getElementById("presencaForm").reset();
+    });
+  </script>
+</body>
+</html>
