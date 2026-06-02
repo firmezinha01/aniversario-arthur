@@ -5,11 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Confirmação de Presença - ARTHUR HENRIQUE</title>
   <link rel="stylesheet" href="/style.css">
+  <style>
+    /* estilo do alerta azul Sonic */
+    .alert {
+      display: none;
+      padding: 15px;
+      margin-top: 10px;
+      border-radius: 8px;
+      background-color: #1E90FF; /* azul Sonic */
+      color: #fff;
+      font-weight: bold;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
   <!-- Fundo -->
   <div class="background">
-    <img src="public/sonic-the-hedgehog-pictures-3ejszlr8zbd5autt.jpg" alt="Convite Sonic">
+    <img src="/sonic-the-hedgehog-pictures-3ejszlr8zbd5autt.jpg" alt="Convite Sonic">
   </div>
 
   <!-- Formulário -->
@@ -34,10 +54,11 @@
       <p>RUA BARBACENA, 487 - BAIRRO BOM CLIMA GUARULHOS/SP</p>
     </form>
 
-    <p id="mensagem"></p>
+    <!-- alerta azul -->
+    <div id="alerta" class="alert"></div>
 
     <!-- Sonic correndo em volta -->
-    <img src="public/647a3ba4fa037443af7752f0e3f0cb97.gif" alt="Sonic correndo" class="sonic-runner">
+    <img src="/647a3ba4fa037443af7752f0e3f0cb97.gif" alt="Sonic correndo" class="sonic-runner">
   </div>
 
   <script>
@@ -50,15 +71,34 @@
         presenca: document.getElementById("presenca").checked
       };
 
-      const response = await fetch("/api/confirmacao", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
+      try {
+        const response = await fetch("/api/confirmacao", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
 
-      const result = await response.json();
-      document.getElementById("mensagem").innerText = result.message;
-      document.getElementById("presencaForm").reset();
+        const result = await response.json();
+
+        // mostrar alerta azul Sonic
+        const alerta = document.getElementById("alerta");
+        alerta.textContent = result.message;
+        alerta.style.display = "block";
+
+        // limpar formulário
+        document.getElementById("presencaForm").reset();
+
+        // esconder alerta depois de 5s
+        setTimeout(() => {
+          alerta.style.display = "none";
+        }, 5000);
+
+      } catch (err) {
+        const alerta = document.getElementById("alerta");
+        alerta.textContent = "Erro ao enviar confirmação!";
+        alerta.style.backgroundColor = "red"; // alerta vermelho em caso de erro
+        alerta.style.display = "block";
+      }
     });
   </script>
 </body>

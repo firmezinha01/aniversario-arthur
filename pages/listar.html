@@ -2,66 +2,40 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lista de Confirmações</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      padding: 20px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
-    th, td {
-      padding: 10px;
-      border: 1px solid #ddd;
-      text-align: center;
-    }
-    th {
-      background: #0078d7;
-      color: white;
-    }
-  </style>
+  <title>Lista de Convidados</title>
 </head>
 <body>
-  <h1>Confirmações de Presença</h1>
-  <table id="tabela">
+  <h1>Convidados Confirmados</h1>
+  <table border="1">
     <thead>
       <tr>
         <th>Nome</th>
         <th>Telefone</th>
         <th>Presença</th>
-        <th>Data/Hora</th>
       </tr>
     </thead>
-    <tbody></tbody>
+    <tbody id="tabela-convidados"></tbody>
   </table>
 
   <script>
-    async function carregarConfirmacoes() {
-      const response = await fetch("/api/listar");
-      const dados = await response.json();
+    async function carregarConvidados() {
+      const resposta = await fetch('/api/listar');
+      const dados = await resposta.json();
 
-      const tbody = document.querySelector("#tabela tbody");
-      tbody.innerHTML = "";
+      const tbody = document.getElementById('tabela-convidados');
+      tbody.innerHTML = '';
 
-      dados.forEach(item => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${item.nome}</td>
-          <td>${item.telefone}</td>
-          <td>${item.presenca}</td>
-          <td>${new Date(item.data).toLocaleString("pt-BR")}</td>
-        `;
-        tbody.appendChild(tr);
+      dados.convidados.forEach(c => {
+        const linha = `<tr>
+          <td>${c.nome}</td>
+          <td>${c.telefone}</td>
+          <td>${c.presenca ? 'Confirmado' : 'Não confirmado'}</td>
+        </tr>`;
+        tbody.innerHTML += linha;
       });
     }
 
-    carregarConfirmacoes();
+    carregarConvidados();
   </script>
 </body>
 </html>
