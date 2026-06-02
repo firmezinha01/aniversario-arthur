@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/firmezinha01/aniversario-arthur#readme",
   "dependencies": {
+    "@supabase/supabase-js": "^2.107.0",
     "express": "^5.2.1"
   }
 }
